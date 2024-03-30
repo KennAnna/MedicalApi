@@ -7,6 +7,7 @@ import {Appointment} from "./appointment/entities/appointment.entity";
 import { UserModule } from './user/user.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { RatingModule } from './rating/rating.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 
@@ -19,11 +20,12 @@ import { RatingModule } from './rating/rating.module';
     password: "root",
     database: "medical",
     logging: 'all',
-    entities: [Appointment]
+    entities: ['dist/**/*.entity.{ts,js}'],
   }),
   UserModule,
   DoctorModule,
-  RatingModule
+  RatingModule,
+  AuthModule
 
   ],
   controllers: [AppController],
