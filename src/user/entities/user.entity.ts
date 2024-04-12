@@ -1,8 +1,12 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {RoleEnum} from "../../auth/enums/role.enum";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     user_id: number;
+
+    @Column()
+    name: string;
 
     @Column()
     email: string;
@@ -18,5 +22,8 @@ export class User {
 
     @Column()
     password: string;
+
+    @Column()
+    role: RoleEnum;
 
 }

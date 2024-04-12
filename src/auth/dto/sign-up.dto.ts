@@ -1,4 +1,5 @@
-import {IsDateString, IsEmail, IsNotEmpty, IsNumberString} from "class-validator";
+import {IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString} from "class-validator";
+import {RoleEnum} from "../enums/role.enum";
 
 export class SignUpDto {
 
@@ -12,5 +13,16 @@ export class SignUpDto {
     dob!: Date;
 
     @IsNotEmpty()
+    name!: string;
+
+
+    @IsNotEmpty()
     password!: string;
+
+    @IsString()
+    @IsOptional()
+    address?: string;
+
+    @IsEnum (RoleEnum)
+    role!: RoleEnum;
 }
