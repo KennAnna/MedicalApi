@@ -20,4 +20,6 @@ export class UpdateInformDto {
     @IsOptional()
     @IsNotEmpty()
     price: string;
+
+    user_id:number;
 }

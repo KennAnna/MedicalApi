@@ -1,9 +1,11 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Query} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards} from '@nestjs/common';
 import { DoctorService } from './doctor.service';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
+
 import {SearchDoctorDto} from "./dto/search-doctor.dto";
 import {RatingDoctorDto} from "./dto/rating-doctor.dto";
+import {UpdateInformDto} from "./dto/update-inform.dto";
+import {AuthGuard} from "@nestjs/passport";
+import {User} from "../auth/user.decorator";
 
 @Controller('doctor')
 export class DoctorController {
@@ -11,21 +13,26 @@ export class DoctorController {
 
   @Get('list')
   getDoctorList(@Query() query: SearchDoctorDto) {
-    return this.doctorService.create(createDoctorDto);
+    return this.doctorService.getDoctorList(query);
   }
 
   @Post('rate')
   createDoctorRate(@Body() body:RatingDoctorDto) {
-    return this.doctorService.findAll();
+    //return this.doctorService.createDoctorRate(body);
   }
 
   @Get('appointment')
   getDoctorAppointment() {
-    return this.doctorService.findOne(+id);
+    //return this.doctorService.getDoctorAppointment();
   }
 
   @Patch('inform')
-  updateDoctorInform(@Body() body: UpdateDoctorDto) {
-    return this.doctorService.remove(+id);
+  @UseGuards(AuthGuard('jwt'))
+  updateDoctorInform(
+      @Body() body: UpdateInformDto,
+      @User('user_id') user_id:number
+  ) {
+    body.user_id = user_id;
+    return this.doctorService.updateDoctorInform(body);
   }
 }
