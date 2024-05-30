@@ -5,6 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {AppointmentController} from "./appointment.controller";
 import {Appointment} from "./entities/appointment.entity";
 import {Repository} from "typeorm";
+import {AppointmentStatusEnum} from "./enums/appointment-status.enum";
 
 @Injectable()
 export class AppointmentService {
@@ -18,8 +19,13 @@ export class AppointmentService {
         return this.appointmentRepository.save(createAppointmentDto)
     }
 
-    findAll() {
-        return this.appointmentRepository.find();
+    findAll(user_id:number) {
+        return this.appointmentRepository.find({
+            relations:['doctor'],
+            where: {
+                patient_id:user_id
+            }
+        });
     }
 
     findOne(id: number) {
@@ -30,11 +36,14 @@ export class AppointmentService {
         });
     }
 
-    update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-        return this.appointmentRepository.update(id, updateAppointmentDto);
+    update(appointment_id: number, updateAppointmentDto: UpdateAppointmentDto) {
+        return this.appointmentRepository.update(appointment_id, updateAppointmentDto);
     }
 
-    remove(id: number) {
-        return this.appointmentRepository.delete(id);
+    remove(appointment_id: number) {
+        return this.appointmentRepository.update(appointment_id, {
+
+            status:AppointmentStatusEnum.CANCEL
+        });
     }
 }
